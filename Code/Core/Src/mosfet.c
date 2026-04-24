@@ -6,3 +6,11 @@
  */
 
 
+#include "mosfet.h"
+
+void Update(void){
+
+}
+void Reset_Pins(void){
+
+}

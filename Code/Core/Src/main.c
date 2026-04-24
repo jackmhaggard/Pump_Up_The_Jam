@@ -18,7 +18,10 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "button.h"
+#include "mosfet.h"
 
+volatile Notes_Struct Notes;
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -94,13 +97,32 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
+	  //Basic test funciton of a C major Triad
+	  //Comment out if not testing code
+	  Arpeggio();
 
-    /* USER CODE BEGIN 3 */
+	  //polling of the GPIO pins to see what notes to activate
+	  Polling();
+	  Update();
   }
   /* USER CODE END 3 */
 }
-
+void Arpeggio(void){
+	GPIOF->BSRR |= C_OUT;
+	Hal_Delay(1000);
+	GPIOF->BSRR |= 2*C_OUT;
+	GPIOB->BSRR |= E_OUT;
+	Hal_Delay(1000);
+	GPIOB->BSRR |= 2*E_OUT;
+	GPIOD->BSRR |= G_OUT;
+	Hal_Delay(1000);
+	GPIOF->BSRR |= C_OUT;
+	GPIOB->BSRR |= E_OUT;
+	Hal_Delay(1000);
+	GPIOF->BSRR |= 2*C_OUT;
+	GPIOB->BSRR |= 2*E_OUT;
+	GPIOD->BSRR |= 2*G_OUT;
+}
 /**
   * @brief System Clock Configuration
   * @retval None

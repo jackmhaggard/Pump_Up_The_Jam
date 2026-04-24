@@ -28,6 +28,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
+#include "stdbool.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -51,6 +52,24 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
+
+void Arpeggio(void);
+
+
+typedef struct {
+	volatile bool C;
+	volatile bool Cs;
+	volatile bool D;
+	volatile bool Ds;
+	volatile bool E;
+	volatile bool F;
+	volatile bool Fs;
+	volatile bool G;
+	volatile bool Gs;
+	volatile bool A;
+	volatile bool As;
+	volatile bool B;
+}Notes;
 
 /* USER CODE BEGIN EFP */
 

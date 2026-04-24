@@ -78,4 +78,7 @@
 #define FOUR_UPPER 4.625
 
 
+
+void Polling(void);
+
 #endif /* INC_BUTTON_H_ */
