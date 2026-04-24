@@ -21,6 +21,7 @@
 #include "button.h"
 #include "mosfet.h"
 
+
 volatile Notes_Struct Notes;
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -99,30 +100,15 @@ int main(void)
   {
 	  //Basic test funciton of a C major Triad
 	  //Comment out if not testing code
-	  Arpeggio();
-
+	  //Arpeggio();
+	  getButtonState();
 	  //polling of the GPIO pins to see what notes to activate
 	  Polling();
 	  Update();
   }
   /* USER CODE END 3 */
 }
-void Arpeggio(void){
-	GPIOF->BSRR |= C_OUT;
-	Hal_Delay(1000);
-	GPIOF->BSRR |= 2*C_OUT;
-	GPIOB->BSRR |= E_OUT;
-	Hal_Delay(1000);
-	GPIOB->BSRR |= 2*E_OUT;
-	GPIOD->BSRR |= G_OUT;
-	Hal_Delay(1000);
-	GPIOF->BSRR |= C_OUT;
-	GPIOB->BSRR |= E_OUT;
-	Hal_Delay(1000);
-	GPIOF->BSRR |= 2*C_OUT;
-	GPIOB->BSRR |= 2*E_OUT;
-	GPIOD->BSRR |= 2*G_OUT;
-}
+
 /**
   * @brief System Clock Configuration
   * @retval None
@@ -184,31 +170,31 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
   //__HAL_RCC_GPIOH_CLK_ENABLE();
-  //__HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
-  //__HAL_RCC_GPIOG_CLK_ENABLE();
+  __HAL_RCC_GPIOG_CLK_ENABLE();
   __HAL_RCC_GPIOE_CLK_ENABLE();
-  //__HAL_RCC_GPIOD_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  GPIOF->MODER |= C_OUT;
-  GPIOF->MODER |= Cs_OUT;
-  GPIOF->MODER |= D_OUT;
+  GPIOF->MODER |= (0b01 << 10);
+  GPIOF->MODER |= (0b01 << 6);
+  GPIOF->MODER |= (0b01 << 2);
 
-  GPIOC->MODER |= Ds_OUT;
-  GPIOC->MODER |= E_OUT;
+  GPIOC->MODER |= (0b01 << 30);
+  GPIOC->MODER |= (0b01 << 26);
 
-  GPIOE->MODER |= F_OUT;
-  GPIOE->MODER |= Fs_OUT;
-  GPIOE->MODER |= G_OUT;
+  GPIOE->MODER |= (0b01 << 10);
+  GPIOE->MODER |= (0b01 << 6);
+  GPIOE->MODER |= (0b01 << 2);
 
-  GPIOB->MODER |= Gs_OUT;
-  GPIOB->MODER |= A_OUT;
-  GPIOB->MODER |= As_OUT;
-  GPIOB->MODER |= B_OUT;
+  GPIOB->MODER |= (0b01 << 18);
+  GPIOB->MODER |= (0b01 << 14);
+  GPIOB->MODER |= (0b01 << 10);
+  GPIOB->MODER |= (0b01 << 6);
 
   //keyboard inputs
-  GPIOF->MODER &= ~(0b00 <<8);
+  GPIOF->MODER &= ~(0b00 << 8);
   GPIOF->MODER &= ~(0b00 << 4);
   GPIOF->MODER &= ~(0b00 << 0);
 
@@ -226,6 +212,25 @@ static void MX_GPIO_Init(void)
 
   GPIOC->MODER &= ~(0b00 << 20);
 
+  //button pull up configuration
+  GPIOF->PUPDR &= ~(0b01 << 8);
+  GPIOF->PUPDR &= ~(0b01 << 4);
+  GPIOF->PUPDR &= ~(0b01 << 0);
+
+  GPIOE->PUPDR &= ~(0b01 << 12);
+
+  GPIOB->PUPDR &= ~(0b01 << 16);
+
+  GPIOG->PUPDR &= ~(0b01 << 22);
+  GPIOG->PUPDR &= ~(0b01 << 18);
+
+  GPIOD->PUPDR &= ~(0b01 << 14);
+  GPIOD->PUPDR &= ~(0b01 << 10);
+  GPIOD->PUPDR &= ~(0b01 << 6);
+  GPIOD->PUPDR &= ~(0b01 << 2);
+
+  GPIOC->PUPDR &= ~(0b01 << 20);
+
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
@@ -241,15 +246,227 @@ static void MX_GPIO_Init(void)
   */
 
 
+void Update(void){
+	if(Notes.C){
+		GPIOF->BSRR |= C_OUT;
+	}
+	else{
+		GPIOF->BSRR |= (C_OUT << 16);
+	}
+	if(Notes.Cs){
+		GPIOF->BSRR |= Cs_OUT;
+	}
+	else{
+		GPIOF->BSRR |= (Cs_OUT <<16);
+	}
+	if(Notes.D){
+		GPIOF->BSRR |= D_OUT;
+	}
+	else{
+		GPIOF->BSRR |= (D_OUT << 16);
+	}
+	if(Notes.Ds){
+		GPIOE->BSRR |= Ds_OUT;
+	}
+	else{
+		GPIOE->BSRR |= (Ds_OUT << 16);
+	}
+	if(Notes.E){
+		GPIOB->BSRR |= E_OUT;
+	}
+	else{
+		GPIOB->BSRR |= (E_OUT << 16);
+	}
+	if(Notes.F){
+		GPIOG->BSRR |= F_OUT;
+	}
+	else{
+		GPIOG->BSRR |= (F_OUT << 16);
+	}
+	if(Notes.Fs){
+		GPIOG->BSRR |= Fs_OUT;
+	}
+	else{
+		GPIOG->BSRR |= (Fs_OUT << 16);
+	}
+	if(Notes.G){
+		GPIOD->BSRR |= G_OUT;
+	}
+	else{
+		GPIOD->BSRR |= (G_OUT << 16);
+	}
+	if(Notes.Gs){
+		GPIOD->BSRR |= Gs_OUT;
+	}
+	else{
+		GPIOD->BSRR |= (Gs_OUT << 16);
+	}
+	if(Notes.A){
+		GPIOD->BSRR |= A_OUT;
+	}
+	else{
+		GPIOD->BSRR |= (A_OUT << 16);
+	}
+	if(Notes.As){
+		GPIOD->BSRR |= As_OUT;
+	}
+	else{
+		GPIOD->BSRR |= (As_OUT << 16);
+	}
+	if(Notes.B){
+		GPIOC->BSRR |= B_OUT;
+	}
+	else{
+		GPIOC->BSRR |= (B_OUT << 16);
+	}
+
+
+}
+void Reset_Pins(void){
+	GPIOF->BSRR |= (C_OUT);
+	GPIOF->BSRR |= (Cs_OUT);
+	GPIOF->BSRR |= 2*D_OUT;
+	GPIOE->BSRR |= 2*Ds_OUT;
+	GPIOB->BSRR |= 2*E_OUT;
+	GPIOG->BSRR |= 2*F_OUT;
+	GPIOG->BSRR |= 2*Fs_OUT;
+	GPIOD->BSRR |= 2*G_OUT;
+	GPIOD->BSRR |= 2*Gs_OUT;
+	GPIOD->BSRR |= 2*A_OUT;
+	GPIOD->BSRR |= 2*As_OUT;
+	GPIOC->BSRR |= 2*B_OUT;
+}
+
+
+void Arpeggio(void){
+	GPIOF->BSRR |= (C_OUT << 16);
+	HAL_Delay(1000);
+	GPIOF->BSRR |= C_OUT;
+	GPIOC->BSRR |= (E_OUT <<16);
+
+	HAL_Delay(1000);
+	GPIOC->BSRR |= E_OUT;
+	GPIOE->BSRR |= (G_OUT << 16);
+
+
+	HAL_Delay(1000);
+	GPIOF->BSRR |= (C_OUT << 16);
+	GPIOC->BSRR |= (E_OUT << 16);
+	HAL_Delay(1000);
+
+	GPIOF->BSRR |= C_OUT;
+	GPIOC->BSRR |= E_OUT;
+	GPIOE->BSRR |= G_OUT;
+
+}
 
 
 
 
+void Polling(void){
+	  if (GPIOF->IDR & (1 << 4)) {
+	      // Logic HIGH (1)
+		  Notes.C = 0;
+	  } else {
+	      // Logic LOW (0)
+		  Notes.C = 1;
+	  }
+	  if (GPIOF->IDR & (1 << 2)) {
+	      // Logic HIGH (1)
+		  Notes.Cs = 0;
+	  } else {
+	      // Logic LOW (0)
+		  Notes.Cs = 1;
+	  }
+	  if (GPIOF->IDR & (1 << 0)) {
+	      // Logic HIGH (1)
+		  Notes.D = 0;
+	  } else {
+	      // Logic LOW (0)
+		  Notes.D = 1;
+	  }
+	  if (GPIOE->IDR & (1 << 6)) {
+	      // Logic HIGH (1)
+		  Notes.Ds = 0;
+	  } else {
+	      // Logic LOW (0)
+		  Notes.Ds = 1;
+	  }
+	  if (GPIOB->IDR & (1 << 8)) {
+	      // Logic HIGH (1)
+		  Notes.E = 0;
+	  } else {
+	      // Logic LOW (0)
+		  Notes.E = 1;
+	  }
+	  if (GPIOG->IDR & (1 << 11)) {
+	      // Logic HIGH (1)
+		  Notes.F = 0;
+	  } else {
+	      // Logic LOW (0)
+		  Notes.F = 1;
+	  }
+	  if (GPIOG->IDR & (1 << 9)) {
+	      // Logic HIGH (1)
+		  Notes.Fs = 0;
+	  } else {
+	      // Logic LOW (0)
+		  Notes.Fs = 1;
+	  }
+	  if (GPIOD->IDR & (1 << 7)) {
+	      // Logic HIGH (1)
+		  Notes.G = 0;
+	  } else {
+	      // Logic LOW (0)
+		  Notes.G = 1;
+	  }
+	  if (GPIOD->IDR & (1 << 5)) {
+	      // Logic HIGH (1)
+		  Notes.Gs = 0;
+	  } else {
+	      // Logic LOW (0)
+		  Notes.Gs = 1;
+	  }
+	  if (GPIOD->IDR & (1 << 3)) {
+	      // Logic HIGH (1)
+		  Notes.A = 0;
+	  } else {
+	      // Logic LOW (0)
+		  Notes.A = 1;
+	  }
+	  if (GPIOD->IDR & (1 << 1)) {
+	      // Logic HIGH (1)
+		  Notes.As = 0;
+	  } else {
+	      // Logic LOW (0)
+		  Notes.As = 1;
+	  }
+	  if (GPIOC->IDR & (1 << 10)) {
+	      // Logic HIGH (1)
+		  Notes.B = 0;
+	  } else {
+	      // Logic LOW (0)
+		  Notes.B = 1;
+	  }
+}
+
+void getButtonState(){
+ 	uint32_t state = HAL_GPIO_ReadPin(GPIOA, BUTTON_PIN);
+	if(state == 1){
+		Reset_Pins();
+	}
+}
+
+void Button_Init(void){
+	GPIO_InitTypeDef* button = {0};
+	__HAL_RCC_GPIOA_CLK_ENABLE();
+	button->Pin = GPIO_PIN_0;
+	button->Mode = GPIO_MODE_INPUT;
+
+	HAL_GPIO_Init(GPIOA, button);
 
 
-
-
-
+}
 
 void Error_Handler(void)
 {

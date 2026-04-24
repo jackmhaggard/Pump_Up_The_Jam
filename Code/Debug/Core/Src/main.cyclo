@@ -1,5 +1,10 @@
-../Core/Src/main.c:65:5:main	1
-../Core/Src/main.c:104:6:Arpeggio	1
-../Core/Src/main.c:111:6:SystemClock_Config	3
-../Core/Src/main.c:158:13:MX_GPIO_Init	1
-../Core/Src/main.c:235:6:Error_Handler	1
+../Core/Src/main.c:68:5:main	1
+../Core/Src/main.c:116:6:SystemClock_Config	3
+../Core/Src/main.c:163:13:MX_GPIO_Init	1
+../Core/Src/main.c:249:6:Update	13
+../Core/Src/main.c:325:6:Reset_Pins	1
+../Core/Src/main.c:341:6:Arpeggio	1
+../Core/Src/main.c:366:6:Polling	13
+../Core/Src/main.c:453:6:getButtonState	2
+../Core/Src/main.c:460:6:Button_Init	1
+../Core/Src/main.c:471:6:Error_Handler	1

@@ -21,14 +21,106 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
 #define __MAIN_H
-
+#include "stm32f4xx_hal.h"
+#include "stdbool.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
-#include "stdbool.h"
+
+//Button Inputs
+#define C_BUTTON GPIO_PIN_4
+#define C_BUTTON_PORT (0b01 << 10)
+#define Cs_BUTTON GPIO_PIN_2
+#define Cs_BUTTON_PORT (0b01 << 6)
+#define D_BUTTON GPIO_PIN_0
+#define D_BUTTON_PORT (0b01)
+
+#define Ds_BUTTON GPIO_PIN_6
+#define Ds_BUTTON_PORT (0b01 << 14)
+
+#define E_BUTTON GPIO_PIN_8
+#define E_BUTTON_PORT (0b01 << 18)
+
+#define F_BUTTON GPIO_PIN_11
+#define F_BUTTON_PORT (0b01 << 24)
+#define Fs_BUTTON GPIO_PIN_9
+#define Fs_BUTTON_PORT (0b01 << 20)
+
+#define G_BUTTON GPIO_PIN_7
+#define G_BUTTON_PORT (0b01 << 16)
+#define Gs_BUTTON GPIO_PIN_5
+#define Gs_BUTTON_PORT (0b01 << 12)
+#define A_BUTTON GPIO_PIN_3
+#define A_BUTTON_PORT (0b01 << 8)
+#define As_BUTTON GPIO_PIN_1
+#define As_BUTTON_PORT (0b01 << 2)
+
+#define B_BUTTON GPIO_PIN_10
+#define B_BUTTON_PORT (0b01 << 22)
+
+
+//Mosfet Outputs
+#define C_OUT (0b1 << 5)
+#define C_OUT_PORT GPIOF
+#define Cs_OUT (0b1 << 3)
+#define Cs_OUT_PORT GPIOF
+#define D_OUT (0b1 << 1)
+#define D_OUT_PORT GPIOF
+#define Ds_OUT (0b1 << 15)
+#define Ds_OUT_PORT GPIOC
+#define E_OUT (0b1 << 13)
+#define E_OUT_PORT GPIOC
+#define F_OUT (0b1 << 5)
+#define F_OUT_PORT GPIOE
+
+#define Fs_OUT (0b1 << 3)
+#define Fs_OUT_PORT GPIOE
+#define G_OUT (0b1 << 1)
+#define G_OUT_PORT GPIOE
+#define Gs_OUT (0b1 << 9)
+#define Gs_OUT_PORT GPIOB
+#define A_OUT (0b1 << 7)
+#define A_OUT_PORT GPIOB
+#define As_OUT (0b1 << 5)
+#define As_OUT_PORT GPIOB
+#define B_OUT (0b1 << 3)
+#define B_OUT_PORT GPIOB
+
+
+#define ONE_LOWER 0.375
+#define ONE_UPPER 0.875
+#define TWO_LOWER 1.625
+#define TWO_UPPER 2.125
+#define THREE_LOWER 2.875
+#define THREE_UPPER 3.375
+#define FOUR_LOWER 4.125
+#define FOUR_UPPER 4.625
+
+
+
+
+#define BUTTON_PIN GPIO_PIN_0
+
+
+
+
+typedef struct {
+	volatile bool C;
+	volatile bool Cs;
+	volatile bool D;
+	volatile bool Ds;
+	volatile bool E;
+	volatile bool F;
+	volatile bool Fs;
+	volatile bool G;
+	volatile bool Gs;
+	volatile bool A;
+	volatile bool As;
+	volatile bool B;
+}Notes_Struct;
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -52,24 +144,13 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
-
+void Polling(void);
+void Update(void);
+void Reset_Pins(void);
 void Arpeggio(void);
+void getButtonState(void);
+void Button_Init(void);
 
-
-typedef struct {
-	volatile bool C;
-	volatile bool Cs;
-	volatile bool D;
-	volatile bool Ds;
-	volatile bool E;
-	volatile bool F;
-	volatile bool Fs;
-	volatile bool G;
-	volatile bool Gs;
-	volatile bool A;
-	volatile bool As;
-	volatile bool B;
-}Notes;
 
 /* USER CODE BEGIN EFP */
 

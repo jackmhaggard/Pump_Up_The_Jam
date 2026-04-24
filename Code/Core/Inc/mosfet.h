@@ -7,8 +7,11 @@
 
 #ifndef INC_MOSFET_H_
 #define INC_MOSFET_H_
+#include "stm32f4xx_hal.h"
 
-void Update(void);
-void Reset_Pins(void);
+
+
+
+
 
 #endif /* INC_MOSFET_H_ */
