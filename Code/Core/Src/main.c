@@ -93,7 +93,9 @@ int main(void)
   /* USER CODE BEGIN 2 */
   Reset_Pins();
   /* USER CODE END 2 */
-
+  LTCD__Init();
+  LTCD_Layer_Init(0);
+  LCD_Clear(0,LCD_COLOR_WHITE);
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -516,9 +518,11 @@ void Chromatic(void){
 	HAL_Delay(1000);
 	GPIOB->BSRR |= B_OUT;
 	HAL_Delay(1000);
-
-
 }
+
+
+
+
 
 void Error_Handler(void)
 {
