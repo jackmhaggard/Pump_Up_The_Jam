@@ -91,7 +91,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-
+  Reset_Pins();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -101,6 +101,7 @@ int main(void)
 	  //Basic test funciton of a C major Triad
 	  //Comment out if not testing code
 	  //Arpeggio();
+	  //Chromatic();
 	  getButtonState();
 	  //polling of the GPIO pins to see what notes to activate
 	  Polling();
@@ -247,112 +248,110 @@ static void MX_GPIO_Init(void)
 
 
 void Update(void){
-	if(Notes.C){
+	if(!Notes.C){
 		GPIOF->BSRR |= C_OUT;
 	}
 	else{
 		GPIOF->BSRR |= (C_OUT << 16);
 	}
-	if(Notes.Cs){
+	if(!Notes.Cs){
 		GPIOF->BSRR |= Cs_OUT;
 	}
 	else{
 		GPIOF->BSRR |= (Cs_OUT <<16);
 	}
-	if(Notes.D){
+	if(!Notes.D){
 		GPIOF->BSRR |= D_OUT;
 	}
 	else{
 		GPIOF->BSRR |= (D_OUT << 16);
 	}
-	if(Notes.Ds){
-		GPIOE->BSRR |= Ds_OUT;
+	if(!Notes.Ds){
+		GPIOC->BSRR |= Ds_OUT;
 	}
 	else{
-		GPIOE->BSRR |= (Ds_OUT << 16);
+		GPIOC->BSRR |= (Ds_OUT << 16);
 	}
-	if(Notes.E){
-		GPIOB->BSRR |= E_OUT;
-	}
-	else{
-		GPIOB->BSRR |= (E_OUT << 16);
-	}
-	if(Notes.F){
-		GPIOG->BSRR |= F_OUT;
+	if(!Notes.E){
+		GPIOC->BSRR |= E_OUT;
 	}
 	else{
-		GPIOG->BSRR |= (F_OUT << 16);
+		GPIOC->BSRR |= (E_OUT << 16);
 	}
-	if(Notes.Fs){
-		GPIOG->BSRR |= Fs_OUT;
-	}
-	else{
-		GPIOG->BSRR |= (Fs_OUT << 16);
-	}
-	if(Notes.G){
-		GPIOD->BSRR |= G_OUT;
+	if(!Notes.F){
+		GPIOE->BSRR |= F_OUT;
 	}
 	else{
-		GPIOD->BSRR |= (G_OUT << 16);
+		GPIOE->BSRR |= (F_OUT << 16);
 	}
-	if(Notes.Gs){
-		GPIOD->BSRR |= Gs_OUT;
-	}
-	else{
-		GPIOD->BSRR |= (Gs_OUT << 16);
-	}
-	if(Notes.A){
-		GPIOD->BSRR |= A_OUT;
+	if(!Notes.Fs){
+		GPIOE->BSRR |= Fs_OUT;
 	}
 	else{
-		GPIOD->BSRR |= (A_OUT << 16);
+		GPIOE->BSRR |= (Fs_OUT << 16);
 	}
-	if(Notes.As){
-		GPIOD->BSRR |= As_OUT;
-	}
-	else{
-		GPIOD->BSRR |= (As_OUT << 16);
-	}
-	if(Notes.B){
-		GPIOC->BSRR |= B_OUT;
+	if(!Notes.G){
+		GPIOE->BSRR |= G_OUT;
 	}
 	else{
-		GPIOC->BSRR |= (B_OUT << 16);
+		GPIOE->BSRR |= (G_OUT << 16);
+	}
+	if(!Notes.Gs){
+		GPIOB->BSRR |= Gs_OUT;
+	}
+	else{
+		GPIOB->BSRR |= (Gs_OUT << 16);
+	}
+	if(!Notes.A){
+		GPIOB->BSRR |= A_OUT;
+	}
+	else{
+		GPIOB->BSRR |= (A_OUT << 16);
+	}
+	if(!Notes.As){
+		GPIOB->BSRR |= As_OUT;
+	}
+	else{
+		GPIOB->BSRR |= (As_OUT << 16);
+	}
+	if(!Notes.B){
+		GPIOB->BSRR |= B_OUT;
+	}
+	else{
+		GPIOB->BSRR |= (B_OUT << 16);
 	}
 
 
 }
 void Reset_Pins(void){
-	GPIOF->BSRR |= (C_OUT);
-	GPIOF->BSRR |= (Cs_OUT);
-	GPIOF->BSRR |= 2*D_OUT;
-	GPIOE->BSRR |= 2*Ds_OUT;
-	GPIOB->BSRR |= 2*E_OUT;
-	GPIOG->BSRR |= 2*F_OUT;
-	GPIOG->BSRR |= 2*Fs_OUT;
-	GPIOD->BSRR |= 2*G_OUT;
-	GPIOD->BSRR |= 2*Gs_OUT;
-	GPIOD->BSRR |= 2*A_OUT;
-	GPIOD->BSRR |= 2*As_OUT;
-	GPIOC->BSRR |= 2*B_OUT;
+	GPIOF->BSRR |= C_OUT;
+	GPIOF->BSRR |= Cs_OUT;
+	GPIOF->BSRR |= D_OUT;
+	GPIOC->BSRR |= Ds_OUT;
+	GPIOC->BSRR |= E_OUT;
+	GPIOE->BSRR |= F_OUT;
+	GPIOE->BSRR |= Fs_OUT;
+	GPIOE->BSRR |= G_OUT;
+	GPIOB->BSRR |= Gs_OUT;
+	GPIOB->BSRR |= A_OUT;
+	GPIOB->BSRR |= As_OUT;
+	GPIOB->BSRR |= B_OUT;
 }
 
 
 void Arpeggio(void){
 	GPIOF->BSRR |= (C_OUT << 16);
-	HAL_Delay(1000);
+	HAL_Delay(3000);
 	GPIOF->BSRR |= C_OUT;
 	GPIOC->BSRR |= (E_OUT <<16);
 
-	HAL_Delay(1000);
+	HAL_Delay(3000);
 	GPIOC->BSRR |= E_OUT;
 	GPIOE->BSRR |= (G_OUT << 16);
 
 
-	HAL_Delay(1000);
-	GPIOF->BSRR |= (C_OUT << 16);
-	GPIOC->BSRR |= (E_OUT << 16);
-	HAL_Delay(1000);
+
+	HAL_Delay(3000);
 
 	GPIOF->BSRR |= C_OUT;
 	GPIOC->BSRR |= E_OUT;
@@ -464,6 +463,59 @@ void Button_Init(void){
 	button->Mode = GPIO_MODE_INPUT;
 
 	HAL_GPIO_Init(GPIOA, button);
+
+
+}
+
+void Chromatic(void){
+	GPIOF->BSRR |= (C_OUT << 16);
+	HAL_Delay(1000);
+	GPIOF->BSRR |= C_OUT;
+	GPIOF->BSRR |= (Cs_OUT <<16);
+
+	HAL_Delay(1000);
+	GPIOF->BSRR |= Cs_OUT;
+	GPIOF->BSRR |= (D_OUT <<16);
+
+	HAL_Delay(1000);
+	GPIOF->BSRR |= D_OUT;
+	GPIOC->BSRR |= (Ds_OUT << 16);
+
+	HAL_Delay(1000);
+	GPIOC->BSRR |= Ds_OUT;
+	GPIOC->BSRR |= (E_OUT << 16);
+
+	HAL_Delay(1000);
+	GPIOC->BSRR |= E_OUT;
+	GPIOE->BSRR |= (F_OUT << 16);
+
+	HAL_Delay(1000);
+	GPIOE->BSRR |= F_OUT;
+	GPIOE->BSRR |= (Fs_OUT << 16);
+
+	HAL_Delay(1000);
+	GPIOE->BSRR |= Fs_OUT;
+	GPIOE->BSRR |= (G_OUT << 16);
+
+	HAL_Delay(1000);
+	GPIOE->BSRR |= G_OUT;
+	GPIOB->BSRR |= (Gs_OUT << 16);
+
+	HAL_Delay(1000);
+	GPIOB->BSRR |= Gs_OUT;
+	GPIOB->BSRR |= (A_OUT << 16);
+
+	HAL_Delay(1000);
+	GPIOB->BSRR |= A_OUT;
+	GPIOB->BSRR |= (As_OUT << 16);
+
+	HAL_Delay(1000);
+	GPIOB->BSRR |= As_OUT;
+	GPIOB->BSRR |= (B_OUT << 16);
+
+	HAL_Delay(1000);
+	GPIOB->BSRR |= B_OUT;
+	HAL_Delay(1000);
 
 
 }

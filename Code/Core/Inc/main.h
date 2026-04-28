@@ -150,6 +150,7 @@ void Reset_Pins(void);
 void Arpeggio(void);
 void getButtonState(void);
 void Button_Init(void);
+void Chromatic(void);
 
 
 /* USER CODE BEGIN EFP */
