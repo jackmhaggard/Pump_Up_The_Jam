@@ -93,9 +93,11 @@ int main(void)
   /* USER CODE BEGIN 2 */
   Reset_Pins();
   /* USER CODE END 2 */
+  //The following 3 function initialize and prepare the LCD for operation
   LTCD__Init();
   LTCD_Layer_Init(0);
   LCD_Clear(0,LCD_COLOR_WHITE);
+  //visualDemo();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -103,11 +105,16 @@ int main(void)
 	  //Basic test funciton of a C major Triad
 	  //Comment out if not testing code
 	  //Arpeggio();
+	  //testing function of more notes
 	  //Chromatic();
+	  //checks and resets the notes being played based on the button input on the STM board
 	  getButtonState();
 	  //polling of the GPIO pins to see what notes to activate
 	  Polling();
+	  //updates the mosfet gates
 	  Update();
+	  //updates the LCD
+	  LCD_Update();
   }
   /* USER CODE END 3 */
 }
@@ -172,14 +179,14 @@ static void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
-  //__HAL_RCC_GPIOH_CLK_ENABLE();
+  __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
   __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
-  /*Configure GPIO pin Output Level */
+  /*Configure Mosfet controlling GPIO Pins */
   GPIOF->MODER |= (0b01 << 10);
   GPIOF->MODER |= (0b01 << 6);
   GPIOF->MODER |= (0b01 << 2);
@@ -191,7 +198,7 @@ static void MX_GPIO_Init(void)
   GPIOE->MODER |= (0b01 << 6);
   GPIOE->MODER |= (0b01 << 2);
 
-  GPIOB->MODER |= (0b01 << 18);
+  GPIOD->MODER |= (0b01 << 0);
   GPIOB->MODER |= (0b01 << 14);
   GPIOB->MODER |= (0b01 << 10);
   GPIOB->MODER |= (0b01 << 6);
@@ -203,17 +210,17 @@ static void MX_GPIO_Init(void)
 
   GPIOE->MODER &= ~(0b00 << 12);
 
-  GPIOB->MODER &= ~(0b00 << 16);
+  GPIOE->MODER &= ~(0b00 << 0);
 
-  GPIOG->MODER &= ~(0b00 << 22);
+  GPIOG->MODER &= ~(0b00 << 26);
   GPIOG->MODER &= ~(0b00 << 18);
 
   GPIOD->MODER &= ~(0b00 << 14);
-  GPIOD->MODER &= ~(0b00 << 10);
-  GPIOD->MODER &= ~(0b00 << 6);
+  GPIOC->MODER &= ~(0b00 << 16);
+  GPIOA->MODER &= ~(0b00 << 20);
   GPIOD->MODER &= ~(0b00 << 2);
 
-  GPIOC->MODER &= ~(0b00 << 20);
+  GPIOA->MODER &= ~(0b00 << 28);
 
   //button pull up configuration
   GPIOF->PUPDR &= ~(0b01 << 8);
@@ -222,17 +229,17 @@ static void MX_GPIO_Init(void)
 
   GPIOE->PUPDR &= ~(0b01 << 12);
 
-  GPIOB->PUPDR &= ~(0b01 << 16);
+  GPIOE->PUPDR &= ~(0b01 << 0);
 
-  GPIOG->PUPDR &= ~(0b01 << 22);
+  GPIOG->PUPDR &= ~(0b01 << 26);
   GPIOG->PUPDR &= ~(0b01 << 18);
 
   GPIOD->PUPDR &= ~(0b01 << 14);
-  GPIOD->PUPDR &= ~(0b01 << 10);
-  GPIOD->PUPDR &= ~(0b01 << 6);
+  GPIOC->PUPDR &= ~(0b01 << 16);
+  GPIOA->PUPDR &= ~(0b01 << 20);
   GPIOD->PUPDR &= ~(0b01 << 2);
 
-  GPIOC->PUPDR &= ~(0b01 << 20);
+  GPIOA->PUPDR &= ~(0b01 << 28);
 
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
@@ -244,11 +251,77 @@ static void MX_GPIO_Init(void)
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
+  * @brief  This function updates the LCD to display which note(s) is/are currently being played.
   * @retval None
   */
 
+void LCD_Update(void){
+	LCD_Clear(0,LCD_COLOR_WHITE);
+	LCD_SetTextColor(LCD_COLOR_BLACK);
+	LCD_SetFont(&Font16x24);
+	if(Notes.C){
+		LCD_DisplayChar(10, 160, 'C');
+	}
 
+	if(Notes.Cs){
+		LCD_DisplayChar(20, 140, 'C');
+		LCD_DisplayChar(35, 140, '#');
+	}
+
+	if(Notes.D){
+		LCD_DisplayChar(45, 160, 'D');
+	}
+
+	if(Notes.Ds){
+		LCD_DisplayChar(55, 140, 'D');
+		LCD_DisplayChar(70, 140, '#');
+	}
+
+	if(Notes.E){
+		LCD_DisplayChar(80, 160, 'E');
+	}
+
+	if(Notes.F){
+		LCD_DisplayChar(95, 160, 'F');
+
+	}
+
+	if(Notes.Fs){
+		LCD_DisplayChar(105, 140, 'F');
+		LCD_DisplayChar(120, 140, '#');
+	}
+
+	if(Notes.G){
+		LCD_DisplayChar(130, 160, 'G');
+
+	}
+
+	if(Notes.Gs){
+		LCD_DisplayChar(140, 140, 'G');
+		LCD_DisplayChar(155, 140, '#');
+	}
+
+	if(Notes.A){
+		LCD_DisplayChar(165, 160, 'A');
+	}
+
+	if(Notes.As){
+		LCD_DisplayChar(175, 140, 'A');
+		LCD_DisplayChar(190, 140, '#');
+
+	}
+
+	if(Notes.B){
+		LCD_DisplayChar(200, 160, 'B');
+
+	}
+
+}
+
+/**
+  * @brief  This function updates the mosfet controlling GPIO pins to control which note(s) is/are played
+  * @retval None
+  */
 void Update(void){
 	if(!Notes.C){
 		GPIOF->BSRR |= C_OUT;
@@ -299,7 +372,7 @@ void Update(void){
 		GPIOE->BSRR |= (G_OUT << 16);
 	}
 	if(!Notes.Gs){
-		GPIOB->BSRR |= Gs_OUT;
+		GPIOD->BSRR |= Gs_OUT;
 	}
 	else{
 		GPIOB->BSRR |= (Gs_OUT << 16);
@@ -325,6 +398,11 @@ void Update(void){
 
 
 }
+
+/**
+  * @brief  This function resets the notes to all be off in the event that a weird logic state is captured
+  * @retval None
+  */
 void Reset_Pins(void){
 	GPIOF->BSRR |= C_OUT;
 	GPIOF->BSRR |= Cs_OUT;
@@ -340,7 +418,10 @@ void Reset_Pins(void){
 	GPIOB->BSRR |= B_OUT;
 }
 
-
+/**
+  * @brief  This function plays a C major triad for testing purposes.
+  * @retval None
+  */
 void Arpeggio(void){
 	GPIOF->BSRR |= (C_OUT << 16);
 	HAL_Delay(3000);
@@ -363,7 +444,10 @@ void Arpeggio(void){
 
 
 
-
+/**
+  * @brief  This function checks the logic level of each of the 12 button inputs
+  * @retval None
+  */
 void Polling(void){
 	  if (GPIOF->IDR & (1 << 4)) {
 	      // Logic HIGH (1)
@@ -393,14 +477,14 @@ void Polling(void){
 	      // Logic LOW (0)
 		  Notes.Ds = 1;
 	  }
-	  if (GPIOB->IDR & (1 << 8)) {
+	  if (GPIOE->IDR & (1 << 0)) {
 	      // Logic HIGH (1)
 		  Notes.E = 0;
 	  } else {
 	      // Logic LOW (0)
 		  Notes.E = 1;
 	  }
-	  if (GPIOG->IDR & (1 << 11)) {
+	  if (GPIOG->IDR & (1 << 13)) {
 	      // Logic HIGH (1)
 		  Notes.F = 0;
 	  } else {
@@ -421,14 +505,14 @@ void Polling(void){
 	      // Logic LOW (0)
 		  Notes.G = 1;
 	  }
-	  if (GPIOD->IDR & (1 << 5)) {
+	  if (GPIOC->IDR & (1 << 8)) {
 	      // Logic HIGH (1)
 		  Notes.Gs = 0;
 	  } else {
 	      // Logic LOW (0)
 		  Notes.Gs = 1;
 	  }
-	  if (GPIOD->IDR & (1 << 3)) {
+	  if (GPIOA->IDR & (1 << 10)) {
 	      // Logic HIGH (1)
 		  Notes.A = 0;
 	  } else {
@@ -442,7 +526,7 @@ void Polling(void){
 	      // Logic LOW (0)
 		  Notes.As = 1;
 	  }
-	  if (GPIOC->IDR & (1 << 10)) {
+	  if (GPIOA->IDR & (1 << 14)) {
 	      // Logic HIGH (1)
 		  Notes.B = 0;
 	  } else {
@@ -451,6 +535,10 @@ void Polling(void){
 	  }
 }
 
+/**
+  * @brief  This function checks the reset button and calls the associated function if needed.
+  * @retval None
+  */
 void getButtonState(){
  	uint32_t state = HAL_GPIO_ReadPin(GPIOA, BUTTON_PIN);
 	if(state == 1){
@@ -458,6 +546,10 @@ void getButtonState(){
 	}
 }
 
+/**
+  * @brief  This function initializes the button
+  * @retval None
+  */
 void Button_Init(void){
 	GPIO_InitTypeDef* button = {0};
 	__HAL_RCC_GPIOA_CLK_ENABLE();
@@ -469,6 +561,10 @@ void Button_Init(void){
 
 }
 
+/**
+  * @brief  This function plays all 12 notes in a chromatic scale for testing purposes.
+  * @retval None
+  */
 void Chromatic(void){
 	GPIOF->BSRR |= (C_OUT << 16);
 	HAL_Delay(1000);

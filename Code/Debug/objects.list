@@ -1,5 +1,6 @@
 "./Core/Src/LCD_Driver.o"
 "./Core/Src/button.o"
+"./Core/Src/fonts.o"
 "./Core/Src/ili9341.o"
 "./Core/Src/includes.o"
 "./Core/Src/main.o"

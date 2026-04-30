@@ -1,8 +1,8 @@
 /*
  * LCD_Driver.c
  *
- *  Created on: Sep 28, 2023
- *      Author: Xavion
+ *  Created on: 4/29/2026
+ *      Author: Jack Haggard & Zach Schultz
  */
 
 #include "LCD_Driver.h"

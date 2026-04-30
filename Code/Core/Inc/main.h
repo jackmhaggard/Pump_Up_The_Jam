@@ -55,7 +55,7 @@ extern "C" {
 
 #define G_BUTTON GPIO_PIN_7
 #define G_BUTTON_PORT (0b01 << 16)
-#define Gs_BUTTON GPIO_PIN_5
+#define Gs_BUTTON GPIO_PIN_8
 #define Gs_BUTTON_PORT (0b01 << 12)
 #define A_BUTTON GPIO_PIN_3
 #define A_BUTTON_PORT (0b01 << 8)
@@ -84,8 +84,8 @@ extern "C" {
 #define Fs_OUT_PORT GPIOE
 #define G_OUT (0b1 << 1)
 #define G_OUT_PORT GPIOE
-#define Gs_OUT (0b1 << 9)
-#define Gs_OUT_PORT GPIOB
+#define Gs_OUT (0b1 << 0)
+#define Gs_OUT_PORT GPIOD
 #define A_OUT (0b1 << 7)
 #define A_OUT_PORT GPIOB
 #define As_OUT (0b1 << 5)
@@ -156,6 +156,7 @@ void Arpeggio(void);
 void getButtonState(void);
 void Button_Init(void);
 void Chromatic(void);
+void LCD_Update(void);
 
 
 /* USER CODE BEGIN EFP */
